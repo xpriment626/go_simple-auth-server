@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"simple-server-auth/internal"
 )
 
 const (
@@ -11,12 +12,9 @@ const (
 	CONN_PORT = "8080"
 )
 
-func message(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
-}
-
 func main() {
-	http.HandleFunc("/", message)
+	fmt.Printf("Server running at port: %s\n", CONN_PORT)
+	http.HandleFunc("/", internal.BasicAuth(internal.Message, "Please enter your username and password"))
 	err := http.ListenAndServe(CONN_HOST+":"+CONN_PORT, nil)
 	if err != nil {
 		log.Fatal("error starting http server:", err)
